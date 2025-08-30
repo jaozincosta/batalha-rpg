@@ -8,7 +8,7 @@ public class Jogador {
 
     public Jogador(String nome, int vida, int ataque, int defesa){
         this.nome = nome;
-        this.vidas = vidas;
+        this.vidas = vida;
         this.ataque = ataque;
         this.defesa = defesa;
     }
@@ -30,20 +30,16 @@ public class Jogador {
     }
 
     public String atacar(Jogador inimigo){
-        int ataqueCritico = (int) (Math.random() * 100);
+        int chance = (int) (Math.random() * 100);
         int danoBase = this.ataque - inimigo.getDefesa();
-        if (danoBase < 0){
-            danoBase = 0;
+        if (chance < 10) {
+            danoBase = (this.ataque * 2) - inimigo.getDefesa();
         }
+        danoBase = Math.max(1, danoBase);
 
-        if(ataqueCritico < 10){
-            danoBase *= 2;
-            inimigo.receberDano(danoBase);
-            return "ATAQUE CRITICO! " + this.nome + " atacou" + inimigo.getNome() + " e causou " + danoBase + " de dano";
-        } else {
-            inimigo.receberDano(danoBase);
-            return this.nome + " atacou " + inimigo.getNome() + " e causou" + danoBase + " de dano";
-        }
+        inimigo.receberDano(danoBase);
+        return (chance < 10 ? "ATAQUE CRITICO! " : "") +
+                this.nome + " atacou " + inimigo.getNome() + " e causou " + danoBase + " de dano";
     }
 
     public void receberDano(int dano) {
@@ -52,5 +48,4 @@ public class Jogador {
             this.vidas = 0;
         }
     }
-
 }
